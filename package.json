@@ -42,6 +42,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/hapi__hapi": "^20.0.12",
     "@types/micromatch": "^4.0.2",
+    "@types/node": "^16",
     "@types/probe-image-size": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
