@@ -1,0 +1,11 @@
+node_modules
+Dockerfile
+.dockerignore
+*.log
+.env
+.DS_Store
+
+/.idea
+/.vscode
+/build
+/data

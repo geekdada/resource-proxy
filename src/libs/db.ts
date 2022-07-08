@@ -1,9 +1,7 @@
 import { Sequelize } from 'sequelize'
 import { join } from 'path'
 
-import { isProd } from './config.js'
-
-const file = join(process.cwd(), 'db.sqlite')
+const file = join(process.cwd(), 'data/db.sqlite')
 
 export const getDatabase = (() => {
   let database: Sequelize
