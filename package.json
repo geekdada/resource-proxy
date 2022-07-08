@@ -1,0 +1,60 @@
+{
+  "name": "@royli/resource-proxy",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Proxy resources from other services",
+  "author": "Roy Li<me@royli.dev>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "node ./build/index.js",
+    "dev": "nodemon ./src/index.ts | pino-pretty",
+    "build": "tsc",
+    "lint": "eslint --ext .ts ./src",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.121.0",
+    "@hapi/boom": "^10.0.0",
+    "@hapi/hapi": "^20.2.2",
+    "dotenv": "^16.0.1",
+    "envalid": "^7.3.1",
+    "etag": "^1.8.1",
+    "file-type": "^17.1.2",
+    "fs-extra": "^10.1.0",
+    "got": "^12.1.0",
+    "hapi-pino": "^10.1.0",
+    "joi": "^17.6.0",
+    "npm-run-all": "^4.1.5",
+    "pino": "^8.1.0",
+    "pino-pretty": "^8.1.0",
+    "probe-image-size": "^7.2.3",
+    "sequelize": "^6.21.2",
+    "sqlite3": "^5.0.8"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.2.210",
+    "@swc/helpers": "^0.4.3",
+    "@types/cloneable-readable": "^2.0.0",
+    "@types/etag": "^1.8.1",
+    "@types/fs-extra": "^9.0.13",
+    "@types/hapi__hapi": "^20.0.12",
+    "@types/probe-image-size": "^7.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1",
+    "regenerator-runtime": "^0.13.9",
+    "ts-node": "^10.8.2",
+    "typescript": "^4.7.4"
+  },
+  "ts-node": {
+    "swc": true
+  },
+  "engines": {
+    "node": ">=14.16"
+  }
+}

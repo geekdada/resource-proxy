@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "lib": ["es2015", "es2017"],
+    "module": "node16",
+    "moduleResolution": "node16",
+    "target": "es6",
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": false,
+    "pretty": true,
+    "strict": true,
+    "sourceMap": true,
+    "outDir": "./build",
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "declaration": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "compileOnSave": false,
+  "ts-node": {
+    "esm": true
+  }
+}
