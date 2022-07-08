@@ -1,8 +1,11 @@
 import { ServerRoute } from '@hapi/hapi'
 import Joi from 'joi'
-import { AssetState } from '../constants/asset.js'
+import micromatch from 'micromatch'
+import boom from '@hapi/boom'
 
+import { AssetState } from '../constants/asset.js'
 import AssetManager from '../services/asset-manager.js'
+import { originWhiteList } from '../libs/config.js'
 
 const proxyRoute: ServerRoute = {
   method: 'GET',
@@ -21,8 +24,19 @@ const proxyRoute: ServerRoute = {
   handler: async (request, h) => {
     const { target } = request.params
     const { search } = request.url
+    const requestOrigin = request.headers.origin || request.headers.referer
     const targetURL = new URL(target)
     targetURL.search = search
+
+    if (originWhiteList && requestOrigin) {
+      if (
+        !micromatch.isMatch(new URL(requestOrigin).hostname, originWhiteList)
+      ) {
+        throw new boom.Boom('Origin not allowed', {
+          statusCode: 400,
+        })
+      }
+    }
 
     const assetManager = new AssetManager(targetURL)
 

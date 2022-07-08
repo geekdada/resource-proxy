@@ -17,3 +17,11 @@ export const s3Endpoint = envs.S3_ENDPOINT
 export const s3Bucket = envs.S3_BUCKET
 export const s3AccessKeyId = envs.S3_ACCESS_KEY_ID
 export const s3SecretAccessKey = envs.S3_SECRET_ACCESS_KEY
+
+export const upstreamWhiteList = process.env.UPSTREAM_WHITE_LIST
+  ? process.env.UPSTREAM_WHITE_LIST.split(',')
+  : []
+
+export const originWhiteList = process.env.ORIGIN_WHITE_LIST
+  ? process.env.ORIGIN_WHITE_LIST.split(',')
+  : []

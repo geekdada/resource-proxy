@@ -3,9 +3,11 @@ import got from 'got'
 import { join } from 'node:path'
 import fs, { ReadStream } from 'fs-extra'
 import probe from 'probe-image-size'
-import { AssetState } from '../constants/asset.js'
+import micromatch from 'micromatch'
+import boom from '@hapi/boom'
 
-import { tempDir } from '../libs/config.js'
+import { AssetState } from '../constants/asset.js'
+import { tempDir, upstreamWhiteList } from '../libs/config.js'
 import { getETagFromBuffer, getSHA1 } from '../libs/hash.js'
 import { serverLogger } from '../libs/logger.js'
 import { getObject, putObject } from '../libs/s3.js'
@@ -43,6 +45,14 @@ class AssetManager {
     return `assets/${this.aid}/${this.name}`
   }
 
+  get isInWhiteList(): boolean {
+    if (upstreamWhiteList) {
+      return micromatch.isMatch(this.assetURL.hostname, upstreamWhiteList)
+    }
+
+    return true
+  }
+
   public async matchFileHash(fileHash: string): Promise<Asset | null> {
     const asset = await Asset.findOne({
       where: {
@@ -58,6 +68,12 @@ class AssetManager {
       throw new Error(
         `AssetManager already initialized for asset ${this.assetURL}`
       )
+    }
+
+    if (!this.isInWhiteList) {
+      throw new boom.Boom('Asset is from host that is not in white list', {
+        statusCode: 400,
+      })
     }
 
     const assetModel = await Asset.findOne({
