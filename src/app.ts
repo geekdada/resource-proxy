@@ -5,6 +5,7 @@ import { tempDir } from './libs/config.js'
 import { getDatabase } from './libs/db.js'
 import { registerLogger } from './libs/logger.js'
 import createRouter from './router.js'
+import { registerSentry } from './libs/sentry.js'
 
 const initServer = async (host: string, port: number) => {
   const server = Hapi.server({
@@ -18,6 +19,7 @@ const initServer = async (host: string, port: number) => {
   await database.sync()
 
   await registerLogger(server)
+  await registerSentry(server)
 
   createRouter(server)
 

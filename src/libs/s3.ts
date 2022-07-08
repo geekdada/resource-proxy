@@ -10,11 +10,13 @@ import {
   s3AccessKeyId,
   s3Bucket,
   s3Endpoint,
+  s3Region,
   s3SecretAccessKey,
 } from './config.js'
 
 export const client = new S3Client({
   endpoint: s3Endpoint,
+  region: s3Region,
   credentials: {
     accessKeyId: s3AccessKeyId,
     secretAccessKey: s3SecretAccessKey,

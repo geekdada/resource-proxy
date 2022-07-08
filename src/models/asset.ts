@@ -18,13 +18,13 @@ class Asset extends Model<
   InferCreationAttributes<Asset>
 > {
   declare aid: string
-  declare mime: string
+  declare name: string
   declare ext: string
-  declare size: number
-  declare fileHash: string
+  declare mime?: string
+  declare size?: number
+  declare fileHash?: string
   declare width?: number
   declare height?: number
-  declare name?: string
   declare assetState: AssetState
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
@@ -41,7 +41,7 @@ Asset.init(
       allowNull: false,
       primaryKey: true,
     },
-    mime: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -49,13 +49,17 @@ Asset.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    mime: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     size: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     fileHash: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true,
     },
     width: {
@@ -64,10 +68,6 @@ Asset.init(
     },
     height: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    name: {
-      type: DataTypes.STRING,
       allowNull: true,
     },
     assetState: {

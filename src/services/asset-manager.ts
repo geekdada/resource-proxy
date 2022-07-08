@@ -22,7 +22,6 @@ interface InitResult {
 
 class AssetManager {
   public aid: string
-  public assetModel: Asset | null = null
   public hasInit = false
 
   constructor(private assetURL: URL) {
@@ -83,47 +82,56 @@ class AssetManager {
     })
 
     if (assetModel) {
-      this.assetModel = assetModel
-
-      if (this.assetModel.assetState === AssetState.UPLOADED) {
+      if (assetModel.assetState === AssetState.UPLOADED) {
         const object = await getObject({
           Key: this.s3FileKey,
         })
 
         return {
-          assetState: this.assetModel.assetState,
+          assetState: assetModel.assetState,
           asset: object.Body,
-          assetFileHash: this.assetModel.fileHash,
-          mime: this.assetModel.mime,
+          assetFileHash: assetModel.fileHash,
+          mime: assetModel.mime,
         }
       }
 
       this.hasInit = true
 
       return {
-        assetState: this.assetModel.assetState,
+        assetState: assetModel.assetState,
       }
     } else {
-      const { tempFileBuffer, size, mime, isImage } = await this.saveTempFile()
-      const { width, height } = isImage
-        ? await AssetManager.probeImage(tempFileBuffer)
-        : { width: undefined, height: undefined }
-
-      this.assetModel = await Asset.create({
+      const assetModel = await Asset.create({
         aid: this.aid,
-        mime,
         ext: this.ext,
-        size,
-        fileHash: getETagFromBuffer(tempFileBuffer),
-        width,
-        height,
         name: this.name,
         assetState: AssetState.PENDING,
       })
 
-      if (!this.assetModel) {
+      if (!assetModel) {
         throw new Error('Failed to create asset model')
       }
+
+      const { tempFileBuffer, size, mime, isImage } = await this.saveTempFile()
+      const { width, height } = isImage
+        ? await AssetManager.probeImage(tempFileBuffer)
+        : { width: undefined, height: undefined }
+      const fileHash = getETagFromBuffer(tempFileBuffer)
+
+      await Asset.update(
+        {
+          mime,
+          size,
+          fileHash,
+          width,
+          height,
+        },
+        {
+          where: {
+            aid: this.aid,
+          },
+        }
+      )
 
       await this.saveToS3(tempFileBuffer)
 
@@ -143,7 +151,7 @@ class AssetManager {
       return {
         assetState: AssetState.UPLOADED,
         asset: tempFileBuffer,
-        assetFileHash: this.assetModel.fileHash,
+        assetFileHash: fileHash,
         mime,
       }
     }

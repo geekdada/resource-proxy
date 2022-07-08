@@ -8,5 +8,5 @@ export const getSHA1 = (str: string): string => {
 }
 
 export const getETagFromBuffer = (buffer: Buffer): string => {
-  return etag(buffer)
+  return etag(buffer, { weak: true })
 }
