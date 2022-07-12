@@ -52,9 +52,15 @@ const proxyRoute: ServerRoute = {
     const { assetState, asset, mime, assetFileHash } = await assetManager.init()
 
     switch (assetState) {
-      case AssetState.PENDING:
+      case AssetState.PENDING: {
+        const res = h.response('PENDING').code(202)
+
+        res.header('cache-control', 'no-cache')
+
+        return res
+      }
       case AssetState.UPLOADING: {
-        const res = h.response(assetState).code(202)
+        const res = h.response('UPLOADING').code(202)
 
         res.header('cache-control', 'no-cache')
 

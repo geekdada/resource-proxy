@@ -1,6 +1,6 @@
 export enum AssetState {
-  PENDING = 'PENDING',
-  UPLOADING = 'UPLOADING',
-  UPLOADED = 'UPLOADED',
-  DELETED = 'DELETED',
+  PENDING = 0,
+  UPLOADING = 1,
+  UPLOADED = 2,
+  DELETED = 3,
 }
