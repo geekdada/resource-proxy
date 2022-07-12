@@ -1,6 +1,6 @@
 {
   "name": "@royli/resource-proxy",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
   "description": "Proxy resources from other services",
   "author": "Roy Li<me@royli.dev>",
