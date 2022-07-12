@@ -5,6 +5,7 @@ import fs, { ReadStream } from 'fs-extra'
 import probe from 'probe-image-size'
 import micromatch from 'micromatch'
 import boom from '@hapi/boom'
+import dayjs from 'dayjs'
 
 import { AssetState } from '../constants/asset.js'
 import { tempDir, upstreamWhiteList } from '../libs/config.js'
@@ -75,11 +76,20 @@ class AssetManager {
       })
     }
 
-    const assetModel = await Asset.findOne({
+    let assetModel = await Asset.findOne({
       where: {
         aid: this.aid,
       },
     })
+
+    if (
+      assetModel &&
+      assetModel.assetState === AssetState.PENDING &&
+      dayjs(assetModel.createdAt).add(10, 'minute').isBefore(dayjs())
+    ) {
+      await assetModel.destroy()
+      assetModel = null
+    }
 
     if (assetModel) {
       if (assetModel.assetState === AssetState.UPLOADED) {
@@ -112,47 +122,41 @@ class AssetManager {
         throw new Error('Failed to create asset model')
       }
 
-      const { tempFileBuffer, size, mime, isImage } = await this.saveTempFile()
-      const { width, height } = isImage
-        ? await AssetManager.probeImage(tempFileBuffer)
-        : { width: undefined, height: undefined }
-      const fileHash = getETagFromBuffer(tempFileBuffer)
+      try {
+        const { tempFileBuffer, size, mime, isImage } =
+          await this.saveTempFile()
+        const { width, height } = isImage
+          ? await AssetManager.probeImage(tempFileBuffer)
+          : { width: undefined, height: undefined }
 
-      await Asset.update(
-        {
+        // TODO: handle the UPLOADING state
+        const fileHash = getETagFromBuffer(tempFileBuffer)
+
+        await assetModel.update({
           mime,
           size,
           fileHash,
           width,
           height,
-        },
-        {
-          where: {
-            aid: this.aid,
-          },
-        }
-      )
+        })
 
-      await this.saveToS3(tempFileBuffer)
+        await this.saveToS3(tempFileBuffer)
 
-      await Asset.update(
-        {
+        await assetModel.update({
           assetState: AssetState.UPLOADED,
-        },
-        {
-          where: {
-            aid: this.aid,
-          },
+        })
+
+        this.hasInit = true
+
+        return {
+          assetState: AssetState.UPLOADED,
+          asset: tempFileBuffer,
+          assetFileHash: fileHash,
+          mime,
         }
-      )
-
-      this.hasInit = true
-
-      return {
-        assetState: AssetState.UPLOADED,
-        asset: tempFileBuffer,
-        assetFileHash: fileHash,
-        mime,
+      } catch (error) {
+        await assetModel.destroy()
+        throw error
       }
     }
   }
