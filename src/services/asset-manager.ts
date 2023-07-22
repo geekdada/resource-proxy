@@ -111,7 +111,7 @@ class AssetManager {
 
         return {
           assetState: assetModel.assetState,
-          asset: object.Body,
+          asset: object.Body as ReadStream | undefined,
           assetFileHash: assetModel.fileHash,
           mime: assetModel.mime,
         }

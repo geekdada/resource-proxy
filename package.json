@@ -12,8 +12,7 @@
     "build": "run-s clean && tsc -p tsconfig.build.json",
     "lint": "eslint --ext .ts ./src",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rimraf ./build",
-    "docker:build": "docker build --platform linux/amd64 -t resource-proxy:latest ."
+    "clean": "rimraf ./build"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.121.0",
