@@ -1,6 +1,6 @@
 {
   "name": "@royli/resource-proxy",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "type": "module",
   "description": "Proxy resources from other services",
   "author": "Roy Li<me@royli.dev>",
@@ -12,7 +12,8 @@
     "build": "run-s clean && tsc -p tsconfig.build.json",
     "lint": "eslint --ext .ts ./src",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rimraf ./build"
+    "clean": "rimraf ./build",
+    "docker:build": "docker build --platform linux/amd64 -t resource-proxy:latest ."
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.121.0",
@@ -42,7 +43,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/hapi__hapi": "^20.0.12",
     "@types/micromatch": "^4.0.2",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@types/probe-image-size": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
