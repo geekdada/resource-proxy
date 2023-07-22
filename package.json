@@ -57,8 +57,5 @@
   },
   "ts-node": {
     "swc": true
-  },
-  "engines": {
-    "node": ">=14.16"
   }
 }

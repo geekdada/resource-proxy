@@ -1,4 +1,4 @@
-FROM node:16-alpine AS builder
+FROM node:18-alpine AS builder
 
 ENV APP_DIR /home/node/app
 
@@ -17,7 +17,7 @@ COPY --chown=node:node . .
 
 RUN yarn build
 
-FROM node:16-alpine
+FROM node:18-alpine
 
 ARG PORT=8000
 
