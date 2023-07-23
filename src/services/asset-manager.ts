@@ -28,17 +28,7 @@ class AssetManager {
   constructor(private assetURL: URL) {
     const { searchParams } = assetURL
 
-    if (searchParams.has('table') && searchParams.has('id')) {
-      this.aid = getSHA1(
-        this.assetURL.origin +
-          this.assetURL.pathname +
-          searchParams.get('table') +
-          searchParams.get('id')
-      )
-    }
-    {
-      this.aid = getSHA1(this.assetURL.origin + this.assetURL.pathname)
-    }
+    this.aid = getSHA1(this.assetURL.origin + this.assetURL.pathname)
   }
 
   get ext(): string {
