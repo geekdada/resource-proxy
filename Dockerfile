@@ -37,6 +37,9 @@ WORKDIR $APP_DIR
 USER node
 
 COPY --chown=node:node --from=builder $APP_DIR/build ./build
+COPY --chown=node:node --from=builder $APP_DIR/config ./config
+COPY --chown=node:node --from=builder $APP_DIR/migrations ./migrations
+COPY --chown=node:node --from=builder $APP_DIR/seeders ./seeders
 COPY --chown=node:node --from=builder $APP_DIR/node_modules ./node_modules
 COPY --chown=node:node --from=builder $APP_DIR/package.json ./package.json
 
