@@ -60,7 +60,6 @@ Asset.init(
     fileHash: {
       type: DataTypes.STRING,
       allowNull: true,
-      unique: true,
     },
     width: {
       type: DataTypes.INTEGER,
@@ -100,7 +99,7 @@ Asset.init(
   {
     sequelize,
     tableName: 'assets',
-    indexes: [{ unique: true, fields: ['fileHash'] }],
+    indexes: [{ unique: true, fields: ['aid'] }],
   }
 )
 

@@ -12,7 +12,7 @@ import { tempDir, upstreamWhiteList } from '../libs/config.js'
 import { getETagFromBuffer, getSHA1 } from '../libs/hash.js'
 import { serverLogger } from '../libs/logger.js'
 import { getObject, putObject } from '../libs/s3.js'
-import { Asset } from '../models/index.js'
+import { Asset } from '../models/asset.js'
 
 interface InitResult {
   assetState: AssetState
@@ -24,19 +24,21 @@ interface InitResult {
 class AssetManager {
   public aid: string
   public hasInit = false
+  public urlDecodedPathname: string
 
   constructor(private assetURL: URL) {
     const { searchParams } = assetURL
 
-    this.aid = getSHA1(this.assetURL.origin + this.assetURL.pathname)
+    this.urlDecodedPathname = decodeURIComponent(assetURL.pathname)
+    this.aid = getSHA1(this.assetURL.origin + this.urlDecodedPathname)
   }
 
   get ext(): string {
-    return extname(this.assetURL.pathname)
+    return extname(this.urlDecodedPathname)
   }
 
   get name(): string {
-    return basename(this.assetURL.pathname)
+    return basename(this.urlDecodedPathname)
   }
 
   get fullURL(): string {
